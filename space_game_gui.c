@@ -5,11 +5,13 @@
 #include <unistd.h> // For usleep
 #include <time.h>
 #include <ctype.h>
+#include "linked_list.h"
 
 
-#define MAPHEIGHT 24
-#define MAPWIDTH 24
+#define MAPHEIGHT 10
+#define MAPWIDTH 10
 
+// Matrix containing the map
 char T[MAPWIDTH][MAPHEIGHT];
 
 void generateMap() {
@@ -26,12 +28,12 @@ void generateMap() {
     }
 }
 
-void singularHashtagDraw(int playerPosX, int playerPosY) {
+void singularHashtagDraw(int playerPosY, int playerPosX) {
     T[playerPosY][playerPosX] = '#';
 }
 
 
-void reDrawMap(int playerPosX, int playerPosY, int state) {
+void reDrawMap(int playerPosY, int playerPosX, int state) {
 
     switch (state) { 
         case 1:
@@ -60,5 +62,11 @@ int getSizeX() {
 
 int getSizeY() {
     return MAPHEIGHT;
+}
+
+void drawEnemy(enemy enemyObj) {
+
+    T[enemyObj.posY][enemyObj.posX] = '@';
+
 }
 

@@ -29,7 +29,7 @@ int main() {
     int64_t elaps;
 
     srand(time(NULL));
-
+    initEnemy();
     generateMap();
     clock_gettime(CLOCK_MONOTONIC, &start);
     
@@ -49,11 +49,13 @@ int main() {
         if (elapsed_nanoseconds > target_enemy_nanoseconds) {
             clock_gettime(CLOCK_MONOTONIC, &start_enemy);
             target_enemy_nanoseconds = (long long)start_enemy.tv_sec * 1000000000LL + start_enemy.tv_nsec + (10 * 1000000000LL);
+            spawnEnemy();
+            moveEnemy(playerPosY, playerPosX);
         }
         clock_gettime(CLOCK_MONOTONIC, &current_enemy_time);
         elapsed_nanoseconds = (long long)current_enemy_time.tv_sec * 1000000000LL + current_enemy_time.tv_nsec;
 
-        singularHashtagDraw(playerPosX, playerPosY);
+        singularHashtagDraw(playerPosY, playerPosX);
         if (read(STDIN_FILENO, &user_input, 1) == 1) {
             char lower_char = (char)tolower((unsigned char)user_input); // Convert to lowercase
             
@@ -68,7 +70,7 @@ int main() {
             }
         }
         
-        reDrawMap(playerPosX, playerPosY, 1);
+        reDrawMap(playerPosY, playerPosX, 1);
         fflush(stdout); // Make sure output appears immediately
         printf("\033c");
         clock_gettime(CLOCK_MONOTONIC, &start);

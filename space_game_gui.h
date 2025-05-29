@@ -2,11 +2,12 @@
 #define GAME_GUI
 
 void generateMap();
-void reDrawMap(int playerPosX, int playerPosY, int state);
+void reDrawMap(int playerPosY, int playerPosX, int state);
 void generateShop();
-void singularHashtagDraw(int playerPosX, int playerPosY);
+void singularHashtagDraw(int playerPosY, int playerPosX);
 int getSizeX();
 int getSizeY();
+void drawEnemy();
 
 
 #endif
