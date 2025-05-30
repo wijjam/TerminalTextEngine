@@ -7,6 +7,7 @@
 #include "space_game_gui.h"
 #include "linked_list.h"
 
+#define MAXENEMIES 4
 
 static struct termios original_termios;
 Node* EnemyList;
@@ -41,16 +42,18 @@ void initEnemy() {
 
 void spawnEnemy() {
 
-    int randX = generateRandomX();
-    int randY = generateRandomY();
+    if (getListSize(EnemyList) < MAXENEMIES) {
+        int randX = generateRandomX();
+        int randY = generateRandomY();
 
-    enemy newEnemy;
-    newEnemy.posX = randX;
-    newEnemy.posY = randY;
-    newEnemy.health = 10;
-    addAtEnd(&EnemyList, newEnemy);
+        enemy newEnemy;
+        newEnemy.posX = randX;
+        newEnemy.posY = randY;
+        newEnemy.health = 10;
+        addAtEnd(&EnemyList, newEnemy);
 
-    drawEnemy(newEnemy);
+        drawEnemy(newEnemy);
+    }
 }
 
 
@@ -62,10 +65,16 @@ void moveEnemy(int playerPosY, int playerPosX) {
 
         if (EnemyListTemp->data.posY < playerPosY) {
             EnemyListTemp->data.posY = EnemyListTemp->data.posY + 1;
-        } else if (EnemyListTemp->data.posY == playerPosY) {
-            // Do nothing
         } else if (EnemyListTemp->data.posY > playerPosY) {
             EnemyListTemp->data.posY = EnemyListTemp->data.posY - 1;
+        }
+
+        else if (EnemyListTemp->data.posX < playerPosX) {
+            EnemyListTemp->data.posX = EnemyListTemp->data.posX + 1;
+        } else if (EnemyListTemp->data.posX == playerPosX) {
+            // Do nothing
+        } else if (EnemyListTemp->data.posX > playerPosX) {
+            EnemyListTemp->data.posX = EnemyListTemp->data.posX - 1;
         }
 
         drawEnemy(EnemyListTemp->data);

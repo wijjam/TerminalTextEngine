@@ -19,4 +19,10 @@ void spawnEnemy();
 void moveEnemy(int playerPosX, int playerPosY);
 
 
+//Add collition.
+
+//Add gun
+
+//Add score and gold.
+
 #endif

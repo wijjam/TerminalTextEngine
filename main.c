@@ -24,8 +24,10 @@ int main() {
     int playerPosX = 4;
     int playerPosY = 4;
     long long target_enemy_nanoseconds = 0;
-    long long elapsed_nanoseconds = 1;
-    struct timespec start, current, start_enemy, current_enemy_time;
+    long long elapsed_enemy_nanoseconds = 1;
+    long long target_enemy_movement_nanoseconds = 0;
+    long long elapsed_enemy_movement_nanoseconds = 1;
+    struct timespec start, current, start_enemy, current_enemy_time, start_enemy_movement, current_enemy_movement;
     int64_t elaps;
 
     srand(time(NULL));
@@ -46,14 +48,22 @@ int main() {
             usleep(time_to_sleep / 1000);
         }
 
-        if (elapsed_nanoseconds > target_enemy_nanoseconds) {
+        if (elapsed_enemy_nanoseconds > target_enemy_nanoseconds) {
             clock_gettime(CLOCK_MONOTONIC, &start_enemy);
             target_enemy_nanoseconds = (long long)start_enemy.tv_sec * 1000000000LL + start_enemy.tv_nsec + (10 * 1000000000LL);
             spawnEnemy();
-            moveEnemy(playerPosY, playerPosX);
         }
         clock_gettime(CLOCK_MONOTONIC, &current_enemy_time);
-        elapsed_nanoseconds = (long long)current_enemy_time.tv_sec * 1000000000LL + current_enemy_time.tv_nsec;
+        elapsed_enemy_nanoseconds = (long long)current_enemy_time.tv_sec * 1000000000LL + current_enemy_time.tv_nsec;
+
+        if (elapsed_enemy_movement_nanoseconds > target_enemy_movement_nanoseconds) {
+            clock_gettime(CLOCK_MONOTONIC, &start_enemy_movement);
+            target_enemy_movement_nanoseconds = (long long)start_enemy_movement.tv_sec * 1000000000LL + start_enemy_movement.tv_nsec + (1 * 1000000000LL);
+            moveEnemy(playerPosY, playerPosX);
+        }
+        clock_gettime(CLOCK_MONOTONIC, &current_enemy_movement);
+        elapsed_enemy_movement_nanoseconds = (long long)current_enemy_movement.tv_sec * 1000000000LL + current_enemy_movement.tv_nsec;
+            
 
         singularHashtagDraw(playerPosY, playerPosX);
         if (read(STDIN_FILENO, &user_input, 1) == 1) {
@@ -71,6 +81,9 @@ int main() {
         }
         
         reDrawMap(playerPosY, playerPosX, 1);
+
+        
+
         fflush(stdout); // Make sure output appears immediately
         printf("\033c");
         clock_gettime(CLOCK_MONOTONIC, &start);
